@@ -1,9 +1,14 @@
 
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///people.db'
+# Use DATABASE_URL env var if provided, otherwise fall back to sqlite for local dev
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///people.db')
 db = SQLAlchemy(app)
 
 class Person(db.Model):

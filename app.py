@@ -2,14 +2,18 @@ import os
 import cv2
 import numpy as np
 import base64
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
 # Production configuration
+load_dotenv()  # load variables from a local .env file into environment (development convenience)
+
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', 'your_super_secret_key_here_change_in_production')
-# Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://u673831287_qa_attdb:p*NsybHiq0V@92.113.22.3/u673831287_qa_attdb'
+# Secret key - use environment variable in production. Create a local `.env` from `.env.example`.
+app.secret_key = os.environ.get('SECRET_KEY', os.environ.get('FLASK_SECRET', 'change-this-in-production'))
+# Database configuration - read from environment variable `DATABASE_URL`, fallback to a local sqlite file.
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///people.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable to save memory
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_pre_ping': True,
