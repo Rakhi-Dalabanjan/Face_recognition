@@ -262,8 +262,9 @@ def identify():
                 print(f"Error preparing face image: {e}")
             return jsonify({
                 'recognized': False,
-                'message': 'No people trained yet. Add people first.',
-                'face_image': face_b64
+                'message': 'No face data available. Upload images via Add Person to enable recognition.',
+                'face_image': face_b64,
+                'security_note': 'Face images are stored locally only and not in version control for privacy.'
             })
 
         STRICT_CONFIDENCE_THRESHOLD = 80
